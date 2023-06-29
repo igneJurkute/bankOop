@@ -1,0 +1,18 @@
+{
+    "name": "mundus/bank",
+    "description": "simple bank",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Bank\\": "app/",
+            "App\\DB\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "igneJurkute",
+            "email": "127085677+igneJurkute@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
