@@ -16,7 +16,7 @@ class AccountsController
         $data = new FileWriter('account');
 
         return App::view('accounts/index', [
-            'pageTitle' => 'Sąskaitų sąrašas',
+            'pageTitle' => 'Accounts',
             'accounts' => $data->showAll(),
         ]);
     }
@@ -31,7 +31,7 @@ class AccountsController
         $iban = $old['iban'] ?? IbanId::generateLithuanianIBAN();
 
         return App::view('accounts/create', [
-            'pageTitle' => 'Pridėti sąskaitą',
+            'pageTitle' => 'Add account',
             'firstName' => $firstname,
             'lastName' => $lastName,
             'personalId' => $personalId,
@@ -48,18 +48,20 @@ class AccountsController
         $error3 = 0;
 
         if (strlen($firstName) < 3 || strlen($lastName) < 3) {
-            Messages::addMessage('warning', 'Vardą ir pavardę turi sudaryti bent trys simboliai.');
+            Messages::addMessage('warning', '
+            The first and last name must consist of at least three characters.');
             $error1 = 1;
         }
 
         if (!ctype_digit($personalId) || strlen(trim($personalId)) !== 11) {
-            Messages::addMessage('warning', 'Asmens kodą turi sudaryti vienuolika skaičių.');
+            Messages::addMessage('warning', '
+            ID code must consist of eleven numbers.');
             $error2 = 1;
         }
 
         foreach ($accounts as $account) {
             if ($account['personalId'] === $personalId) {
-                Messages::addMessage('warning', 'Vartotojas su tokiu asmens kodu jau įvestas.');
+                Messages::addMessage('warning', 'A user with this ID code has already been entered.');
                 $error3 = 1;
             }
         }
@@ -81,7 +83,8 @@ class AccountsController
         ];
         $data->create($newAccount);
 
-        Messages::addMessage('success', 'Nauja sąskaita sėkmingai pridėta.');
+        Messages::addMessage('success', '
+        New account successfully added.');
         header('Location: /accounts');
     }
 
@@ -98,7 +101,8 @@ class AccountsController
         $balance = $account['balance'];
 
         return App::view('accounts/edit', [
-            'pageTitle' => 'Redaguoti sąskaitą',
+            'pageTitle' => '
+            Edit account',
             'id' => $id,
             'firstName' => $firstName,
             'lastName' => $lastName,
@@ -117,7 +121,7 @@ class AccountsController
 
         if (isset($request['add'])) {
             if ($amount <= 0) {
-                Messages::addMessage('warning', 'Įvesta suma turi būti teigiamas sveikasis skaičius.');
+                Messages::addMessage('warning', 'The amount entered must be a positive integer.');
                 header('Location: /accounts/edit/' . $id);
                 die;
             }
@@ -125,19 +129,20 @@ class AccountsController
             $account['balance'] += $amount;
 
             $data->update($id, $account);
-            Messages::addMessage('success', 'Į sąskaitą pridėta lėšų.');
+            Messages::addMessage('success', '
+            Funds have been added to the account.');
             header('Location: /accounts/edit/' . $id);
         }
 
         if (isset($_POST['withdraw'])) {
             if ($amount <= 0) {
-                Messages::addMessage('warning', 'Įvesta suma turi būti teigiamas sveikasis skaičius.');
+                Messages::addMessage('warning', 'The amount entered must be a positive integer.');
                 header('Location: /accounts/edit/' . $id);
                 die;
             }
 
             if ($account['balance'] < $amount) {
-                Messages::addMessage('danger', 'Nepakankamas sąskaitos likutis.');
+                Messages::addMessage('danger', 'Insufficient account balance.');
                 header('Location: /accounts/edit/' . $id);
                 die;
             }
@@ -145,7 +150,8 @@ class AccountsController
             $account['balance'] -= $amount;
 
             $data->update($id, $account);
-            Messages::addMessage('success', 'Iš sąskaitos išimta lėšų.');
+            Messages::addMessage('success', '
+            Funds have been withdrawn from the account.');
 
             if ($delete == 0) {
                 header('Location: /accounts/edit/' . $id);
@@ -165,7 +171,7 @@ class AccountsController
         $balance = $account['balance'];
 
         return App::view('accounts/delete', [
-            'pageTitle' => 'Ištrinti sąskaitą',
+            'pageTitle' => 'Delete account',
             'id' => $id,
             'firstName' => $firstName,
             'lastName' => $lastName,
@@ -181,10 +187,12 @@ class AccountsController
         $account = $data->show($id);
         if ($account['balance'] == 0) {
             $data->delete($id);
-            Messages::addMessage('success', 'Sąskaita sėkmingai ištrinta.');
+            Messages::addMessage('success', '
+            Account deleted successfully.');
             header('Location: /accounts');
         } else {
-            Messages::addMessage('danger', 'Sąskaitoje yra lėšų. Ištrinti negalima.');
+            Messages::addMessage('danger', '
+            There are funds in the account. Cannot be deleted.');
             header('Location: /accounts/delete/' . $id);
         }
     }

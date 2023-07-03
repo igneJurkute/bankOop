@@ -1,8 +1,8 @@
-<div class="w3-container w3-margin">
+<div class="w3-container w3-margin" style="display: flex; align-items: center; flex-direction: column">
 
-    <h1 class="w3-card w3-pale-red w3-padding">Ištrinti sąskaitą</h1>
+    <h1 class="w3-card w3-teal w3-padding">Delete account</h1>
 
-    <p class="w3-margin">Ar tikrai norite ištrinti sąskaitą?</p>
+    <p class="w3-margin">Are you sure you want to delete the account??</p>
 
     <form class="w3-card w3-container" style="width:50%;" action="/accounts/destroy/<?= $id ?>" method="post">
 
@@ -10,7 +10,7 @@
             <h3><?= $firstName ?> <?= $lastName ?></h3>
         </div>
         <div class="w3-container" style="display: flex; flex-direction: column;">
-            <p>Sąskaitos numeris</p>
+            <p>Account number</p>
             <p class="w3-input"><?= $iban ?></p>
         </div>
         <div class="w3-container" style="display: flex; flex-direction: column;">
@@ -19,9 +19,9 @@
         </div>
 
         <div class="w3-padding">
-            <button class="w3-btn w3-pale-red" type="submit">Ištrinti</button>
-            <button class="w3-btn w3-grey">
-                <a href="/accounts">Atšaukti</a>
+            <button class="w3-btn w3-lime" type="submit">Delete</button>
+            <button class="w3-btn w3-red">
+                <a href="/accounts">Cancel</a>
             </button>
         </div>
     </form>
